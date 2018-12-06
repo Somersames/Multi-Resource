@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: multi-resource
+server:
+  port: 8080
