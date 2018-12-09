@@ -1,5 +1,17 @@
 spring:
   application:
     name: multi-resource
+  data:
+    mongodb:
+      db1:
+        host: localhost
+        port: 27017
+        database: db1
+
+      db2:
+        host: localhost
+        port: 27017
+        database: db2
 server:
   port: 8080
+
