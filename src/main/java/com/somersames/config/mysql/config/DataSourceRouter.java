@@ -30,7 +30,4 @@ public class DataSourceRouter extends AbstractRoutingDataSource {
         return contextHolder.get();
     }
 
-    public static void clearDataSource() {
-        contextHolder.remove();
-    }
 }
