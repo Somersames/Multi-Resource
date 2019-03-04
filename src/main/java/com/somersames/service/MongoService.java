@@ -1,7 +1,12 @@
 package com.somersames.service;
 
+import com.somersames.config.mongo.config.UseMongo;
 import com.somersames.config.mongo.db1.DB1Template;
+import com.somersames.config.mongo.db2.DB2Repository;
+import com.somersames.config.mongo.db2.DB2Template;
 import com.somersames.constant.MongoConstant;
+import com.somersames.dto.mongo.MongoDB1;
+import com.somersames.dto.mongo.MongoDB2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,10 +20,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MongoService {
     @Autowired
-    DB1Template db1Template;
+    DB2Repository db2Repository;
 
-    // @Description Mongo的更新语法
+    @UseMongo
     public void mongoUpdate(){
-        db1Template.db1Template().updateFirst(new Query(Criteria.where("_id").is("ad")),new Update().set("remark","da"), MongoConstant.MongoDB1);
+        db2Repository.save(new MongoDB2());
     }
 }
