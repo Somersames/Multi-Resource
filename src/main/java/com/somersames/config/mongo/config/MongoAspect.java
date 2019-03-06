@@ -7,8 +7,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.aop.framework.ReflectiveMethodInvocation;
+import org.springframework.aop.TargetSource;
+import org.springframework.aop.framework.*;
+import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -39,11 +40,11 @@ public class MongoAspect implements ApplicationContextAware {
 ////        String tenant = (String) RequestContextHolder.currentRequestAttributes().getAttribute("tenant", SCOPE_REQUEST);
 ////        tenant = tenant == null ? "test" : tenant;
 //
+
         // 通过反射获取到target
         Field methodInvocationField = joinPoint.getClass().getDeclaredField("methodInvocation");
         methodInvocationField.setAccessible(true);
         ReflectiveMethodInvocation o = (ReflectiveMethodInvocation) methodInvocationField.get(joinPoint);
-
         Field targetField = o.getClass().getDeclaredField("target");
         targetField.setAccessible(true);
         Object target = targetField.get(o);
@@ -55,8 +56,34 @@ public class MongoAspect implements ApplicationContextAware {
         Field mongoOperationsField = singletonTarget.getClass().getDeclaredField("mongoOperations");
         mongoOperationsField.setAccessible(true);
         //需要移除final修饰的变量
-        modifiersField.setInt(mongoOperationsField,mongoOperationsField.getModifiers()&~Modifier.FINAL);
-        mongoOperationsField.set(singletonTarget, applicationContext.getBean("mongoDB1"));
+//        modifiersField.setInt(mongoOperationsField,mongoOperationsField.getModifiers()&~Modifier.FINAL);
+//        mongoOperationsField.set(singletonTarget, applicationContext.getBean("mongoDB1"));
+
+        Field h = o.getProxy().getClass().getDeclaredField("h");
+        h.setAccessible(true);
+        AopProxy aopProxy = (AopProxy) h.get(o.getProxy());
+
+        Field advised = aopProxy.getClass().getDeclaredField("advised");
+        advised.setAccessible(true);
+
+        Object o2 = advised.get(aopProxy);
+
+        if(o2 instanceof Advised) {
+            TargetSource targetSource = ((Advised) o2).getTargetSource();
+            if (targetSource instanceof SingletonTargetSource) {
+                Object o22 = ((SingletonTargetSource) targetSource).getTarget();
+                if (o22 instanceof Advised) {
+                    TargetSource targetSource2 = ((Advised) o22).getTargetSource();
+                    if (targetSource2 instanceof SingletonTargetSource) {
+                        Object o23 = ((SingletonTargetSource) targetSource2).getTarget();
+                        System.out.println(o23);
+                    }
+                    System.out.println(o22.toString());
+                }
+            }
+        }
+
+//        Object target1 = ((SingletonTargetSource)((AdvisedSupport)advised.get(aopProxy)).getTargetSource()).getTarget();
         return joinPoint.proceed();
     }
 

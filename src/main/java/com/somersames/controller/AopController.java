@@ -20,7 +20,6 @@ public class AopController {
 
     @Autowired
     RedisService redisService;
-
     @RequestMapping(value = "/aop",method = RequestMethod.GET)
     public void testCurd(){
         aopMain.say();
