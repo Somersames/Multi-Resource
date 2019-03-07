@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.framework.ReflectiveMethodInvocation;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -32,7 +33,9 @@ public class RedisAspect implements ApplicationContextAware {
     @Around("execution(* com.somersames.service.redis.RedisService.*(..))")
     public void as(ProceedingJoinPoint joinPoint) throws Throwable {
 // 通过反射获取到target
+        /**
         Field methodInvocationField = joinPoint.getClass().getDeclaredField("methodInvocation");
+        System.out.println(AopUtils.isAopProxy(joinPoint.getTarget()));
         methodInvocationField.setAccessible(true);
         ReflectiveMethodInvocation o = (ReflectiveMethodInvocation) methodInvocationField.get(joinPoint);
         Field h = o.getProxy().getClass().getDeclaredField("CGLIB$CALLBACK_0");
@@ -46,6 +49,31 @@ public class RedisAspect implements ApplicationContextAware {
         re.setAccessible(true);
 
 
+        Object[] objs = joinPoint.getArgs();
+        if(objs != null && objs.length !=0){
+            re.set(target,applicationContext.getBean((String) objs[0]));
+        }
+
+         **/
+        //  通过父类获取
+        Field methodInvocationField = joinPoint.getClass().getDeclaredField("methodInvocation");
+        System.out.println(AopUtils.isAopProxy(joinPoint.getTarget()));
+        methodInvocationField.setAccessible(true);
+        ReflectiveMethodInvocation o = (ReflectiveMethodInvocation) methodInvocationField.get(joinPoint);
+        Field h = o.getProxy().getClass().getDeclaredField("CGLIB$CALLBACK_0");
+        h.setAccessible(true);
+        Object dynamicAdvisedInterceptor = h.get(o.getProxy());
+        Field advised = dynamicAdvisedInterceptor.getClass().getDeclaredField("advised");
+        advised.setAccessible(true);
+
+        Object target = ((AdvisedSupport)advised.get(dynamicAdvisedInterceptor)).getTargetSource().getTarget();
+        Field re = target.getClass().getDeclaredField("redisTemplate");
+        re.setAccessible(true);
+        Object re2= re.get(target);
+
+        Field d =  re2.getClass().getSuperclass().getDeclaredField("connectionFactory");
+        d.setAccessible(true);
+        Object oo2= d.get(re2);
         Object[] objs = joinPoint.getArgs();
         if(objs != null && objs.length !=0){
             re.set(target,applicationContext.getBean((String) objs[0]));

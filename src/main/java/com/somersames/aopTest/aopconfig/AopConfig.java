@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.framework.ReflectiveMethodInvocation;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ public class AopConfig {
     @Around("execution(* com.somersames.aopTest.AopMain.*(..))")
     public Object a(ProceedingJoinPoint joinPoint) throws Throwable {
         AopMain o1 = (AopMain)joinPoint.getTarget();
+        System.out.println(AopUtils.isAopProxy(joinPoint.getTarget()));
         o1.setField1("adasadasdasdasd");
 //        Field methodInvocationField = joinPoint.getClass().getDeclaredField("methodInvocation");
 //        methodInvocationField.setAccessible(true);

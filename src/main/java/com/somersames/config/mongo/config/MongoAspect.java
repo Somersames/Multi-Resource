@@ -41,25 +41,26 @@ public class MongoAspect implements ApplicationContextAware {
 ////        tenant = tenant == null ? "test" : tenant;
 //
 
-        // 通过反射获取到target
+//        // 通过反射获取到target
         Field methodInvocationField = joinPoint.getClass().getDeclaredField("methodInvocation");
         methodInvocationField.setAccessible(true);
         ReflectiveMethodInvocation o = (ReflectiveMethodInvocation) methodInvocationField.get(joinPoint);
-        Field targetField = o.getClass().getDeclaredField("target");
-        targetField.setAccessible(true);
-        Object target = targetField.get(o);
-
-        // 获得SimpleMongoRepository，并往里面填入值
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        Object singletonTarget = AopProxyUtils.getSingletonTarget(target);
-        Field mongoOperationsField = singletonTarget.getClass().getDeclaredField("mongoOperations");
-        mongoOperationsField.setAccessible(true);
+//        Field targetField = o.getClass().getDeclaredField("target");
+//        targetField.setAccessible(true);
+//        Object target = targetField.get(o);
+//
+//        // 获得SimpleMongoRepository，并往里面填入值
+//        Field modifiersField = Field.class.getDeclaredField("modifiers");
+//        modifiersField.setAccessible(true);
+//        Object singletonTarget = AopProxyUtils.getSingletonTarget(target);
+//        Field mongoOperationsField = singletonTarget.getClass().getDeclaredField("mongoOperations");
+//        mongoOperationsField.setAccessible(true);
         //需要移除final修饰的变量
 //        modifiersField.setInt(mongoOperationsField,mongoOperationsField.getModifiers()&~Modifier.FINAL);
 //        mongoOperationsField.set(singletonTarget, applicationContext.getBean("mongoDB1"));
 
-        Field h = o.getProxy().getClass().getDeclaredField("h");
+        Field h = o.getProxy().getClass().getSuperclass().getDeclaredField("h");
+//        Field h = o.getClass().getDeclaredField("h");
         h.setAccessible(true);
         AopProxy aopProxy = (AopProxy) h.get(o.getProxy());
 
