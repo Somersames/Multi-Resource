@@ -60,4 +60,10 @@ public class RedisConfig {
         template.setConnectionFactory(jedisConnectionFactory1());
         return template;
     }
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate2() {
+        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+        template.setConnectionFactory(jedisConnectionFactory2());
+        return template;
+    }
 }

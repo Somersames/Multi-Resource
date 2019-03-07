@@ -42,26 +42,9 @@ public class RedisAspect implements ApplicationContextAware {
         advised.setAccessible(true);
 
         Object target = ((AdvisedSupport)advised.get(dynamicAdvisedInterceptor)).getTargetSource().getTarget();
-        Object singletonTarget = AopProxyUtils.getSingletonTarget(dynamicAdvisedInterceptor);
         Field re = target.getClass().getDeclaredField("redisTemplate");
         re.setAccessible(true);
-        Object reO = re.get(target);
-        Field redisCon = reO.getClass().getDeclaredField("target");
-        redisCon.setAccessible(true);
-        redisCon.set(reO,applicationContext.getBean("redis2"));
-        System.out.println(target.toString());
-//        Field targetField = o.getClass().getDeclaredField("target");
-//        targetField.setAccessible(true);
-//        Object target = targetField.get(o);
-//
-//        // 获得SimpleMongoRepository，并往里面填入值
-//        Field modifiersField = Field.class.getDeclaredField("modifiers");
-//        modifiersField.setAccessible(true);
-//        Object singletonTarget = AopProxyUtils.getSingletonTarget(target);
-//        Field mongoOperationsField = singletonTarget.getClass().getDeclaredField("mongoOperations");
-//        mongoOperationsField.setAccessible(true);
-//        modifiersField.setInt(mongoOperationsField,mongoOperationsField.getModifiers()&~Modifier.FINAL);
-//        mongoOperationsField.set(singletonTarget, applicationContext.getBean("redis2"));
+        re.set(target,applicationContext.getBean("redisTemplate2"));
         joinPoint.proceed();
     }
 
