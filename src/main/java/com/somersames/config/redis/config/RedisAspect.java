@@ -44,7 +44,13 @@ public class RedisAspect implements ApplicationContextAware {
         Object target = ((AdvisedSupport)advised.get(dynamicAdvisedInterceptor)).getTargetSource().getTarget();
         Field re = target.getClass().getDeclaredField("redisTemplate");
         re.setAccessible(true);
-        re.set(target,applicationContext.getBean("redisTemplate2"));
+
+
+        Object[] objs = joinPoint.getArgs();
+        if(objs != null && objs.length !=0){
+            re.set(target,applicationContext.getBean((String) objs[0]));
+        }
+
         joinPoint.proceed();
     }
 
