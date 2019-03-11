@@ -15,7 +15,7 @@ public class RedisService {
     RedisTemplate<String,Object> redisTemplate;
 
 
-    public void a(String reditTemplate){
+    public void aopRedis(String reditTemplate){
         redisTemplate.opsForValue().set("a","a");
     }
 

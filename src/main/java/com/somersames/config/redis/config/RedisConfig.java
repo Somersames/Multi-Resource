@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisShardInfo;
 
 /**
  * @author szh
@@ -19,17 +20,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Slf4j
 public class RedisConfig {
 
-
-//    @Bean(name = "redis1")
-//    @ConfigurationProperties(prefix = "spring.redis.db1")
-//    public RedisProperties redisPropertie1(){
-//        return new RedisProperties();
-//    }
-//    @Bean(name = "redis2")
-//    @ConfigurationProperties(prefix = "spring.redis.db2")
-//    public RedisProperties redisPropertie2(){
-//        return new RedisProperties();
-//    }
 
     @Bean(name = "redis1")
     @Primary

@@ -27,6 +27,6 @@ public class AopController {
 
     @RequestMapping(value = "/redis",method = RequestMethod.GET)
     public void testCurd1(){
-        redisService.a("redisTemplate2");
+        redisService.aopRedis("redisTemplate2");
     }
 }
