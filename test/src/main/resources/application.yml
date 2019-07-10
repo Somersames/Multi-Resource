@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: multi-resource
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: db1
+      db1:
+        host: localhost
+        port: 27017
+        database: db1
+
+      db2:
+        host: localhost
+        port: 27017
+        database: db2
+      password:
+server:
+  port: 8080
+

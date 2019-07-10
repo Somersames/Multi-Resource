@@ -6,7 +6,12 @@
 
     <groupId>Multi-Resource</groupId>
     <artifactId>Multi-Resource</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>test</module>
+        <module>core</module>
+    </modules>
     <properties>
         <spring.version>2.1.1.RELEASE</spring.version>
     </properties>
@@ -24,6 +29,13 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
